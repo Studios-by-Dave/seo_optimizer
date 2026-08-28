@@ -1,0 +1,127 @@
+// Prisma schema for SEO Optimizer (Phase 1: Foundation)
+// SQLite for local agency use; easy to migrate to Postgres later.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  users     User[]
+  clients   Client[]
+  projects  Project[]
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String?
+  passwordHash   String
+  createdAt      DateTime @default(now())
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+}
+
+model Client {
+  id             String   @id @default(cuid())
+  name           String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime @default(now())
+  projects       Project[]
+
+  @@index([organizationId])
+}
+
+model Project {
+  id                  String   @id @default(cuid())
+  name                String
+  websiteUrl          String
+  domain              String
+  businessLocation    String?
+  industry            String?
+  primaryCategory     String?
+  targetServiceArea   String?
+  gbpUrl              String?
+  organizationId      String
+  ownerId             String
+  clientId            String?
+  createdAt           DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  client      Client?      @relation(fields: [clientId], references: [id])
+  crawls      Crawl[]
+  urls        Url[]
+
+  @@index([organizationId])
+  @@index([ownerId])
+}
+
+model Crawl {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status        String   @default("queued") // queued | running | completed | failed
+  currentStep   String?  // human readable step
+  startedAt     DateTime @default(now())
+  finishedAt    DateTime?
+  error         String?
+  pagesCrawled  Int      @default(0)
+  totalDiscovered Int    @default(0)
+  config        String?  // JSON string: CrawlConfig
+  stats         String?  // JSON string: aggregated counts
+
+  urls          Url[]
+
+  @@index([projectId])
+}
+
+model Url {
+  id                 String   @id @default(cuid())
+  projectId          String
+  crawlId            String
+  url                String // raw discovered URL
+  normalizedUrl      String // dedupe key
+  httpStatus         Int?
+  finalUrl           String?
+  redirectChain      String? // JSON string: array of {url,status}
+  indexability       String? // crawlable|indexable|non-indexable|blocked|redirected|canonicalized
+  canonicalUrl       String?
+  metaTitle          String?
+  metaTitleLength    Int?
+  metaDescription    String?
+  metaDescriptionLength Int?
+  h1                 String?
+  h1Count            Int?
+  h2Count            Int?
+  wordCount          Int?
+  internalLinks      Int?
+  externalLinks      Int?
+  images             Int?
+  imagesMissingAlt   Int?
+  robotsMeta         String?
+  xRobotsTag         String?
+  inSitemap          Boolean?
+  crawlDepth         Int?
+  discoveredAt       DateTime @default(now())
+  contentHash        String?
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  crawl   Crawl   @relation(fields: [crawlId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([crawlId])
+  @@index([normalizedUrl])
+  @@index([httpStatus])
+  @@index([indexability])
+  @@index([inSitemap])
+}
