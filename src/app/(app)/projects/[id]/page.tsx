@@ -54,7 +54,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <div className="mt-8">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Audit</h2>
-          <RunAuditButton projectId={project.id} />
+          <div className="flex gap-3">
+            <Link
+              href={`/projects/${project.id}/opportunities`}
+              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            >
+              Opportunities
+            </Link>
+            <RunAuditButton projectId={project.id} />
+          </div>
         </div>
         {project.crawls.length === 0 ? (
           <div className="mt-4 rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
