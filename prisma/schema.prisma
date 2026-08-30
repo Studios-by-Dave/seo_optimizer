@@ -1,4 +1,4 @@
-// Prisma schema for SEO Optimizer (Phases 1-5)
+// Prisma schema for SEO Optimizer (Phases 1-6)
 // SQLite for local agency use; easy to migrate to Postgres later.
 
 generator client {
@@ -11,12 +11,15 @@ datasource db {
 }
 
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-  users     User[]
-  clients   Client[]
-  projects  Project[]
+  id           String   @id @default(cuid())
+  name         String
+  logoUrl      String?
+  primaryColor String?
+  website      String?
+  createdAt    DateTime @default(now())
+  users        User[]
+  clients      Client[]
+  projects     Project[]
 }
 
 model User {
@@ -55,6 +58,8 @@ model Project {
   organizationId      String
   ownerId             String
   clientId            String?
+  crawlFrequency      String?  // none|daily|weekly|monthly
+  nextCrawlAt         DateTime?
   createdAt           DateTime @default(now())
 
   organization Organization @relation(fields: [organizationId], references: [id])
