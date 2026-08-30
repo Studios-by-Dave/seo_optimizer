@@ -91,12 +91,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   <span className="mx-2">·</span>
                   <span>{crawl.totalDiscovered} discovered</span>
                   {crawl.status === "completed" && (
-                    <Link
-                      href={`/projects/${project.id}/urls?crawlId=${crawl.id}`}
-                      className="ml-2 rounded-md bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200"
-                    >
-                      View URLs →
-                    </Link>
+                    <>
+                      <Link
+                        href={`/projects/${project.id}/audit`}
+                        className="ml-2 rounded-md bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-200"
+                      >
+                        Audit Report →
+                      </Link>
+                      <Link
+                        href={`/projects/${project.id}/urls?crawlId=${crawl.id}`}
+                        className="rounded-md bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200"
+                      >
+                        View URLs →
+                      </Link>
+                    </>
                   )}
                 </div>
               </div>
