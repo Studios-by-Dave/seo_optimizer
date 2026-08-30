@@ -56,6 +56,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <h2 className="text-lg font-semibold">Audit</h2>
           <div className="flex gap-3">
             <Link
+              href={`/projects/${project.id}/keywords`}
+              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            >
+              Keywords
+            </Link>
+            <Link
               href={`/projects/${project.id}/opportunities`}
               className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
             >
