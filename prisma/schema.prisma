@@ -1,4 +1,4 @@
-// Prisma schema for SEO Optimizer (Phases 1-4)
+// Prisma schema for SEO Optimizer (Phases 1-5)
 // SQLite for local agency use; easy to migrate to Postgres later.
 
 generator client {
@@ -63,6 +63,7 @@ model Project {
   urls        Url[]
   opportunities Opportunity[]
   keywords    Keyword[]
+  competitors Competitor[]
 
   @@index([organizationId])
   @@index([ownerId])
@@ -84,8 +85,11 @@ model Crawl {
 
   urls          Url[]
   findings      AuditFinding[]
+  competitorId  String?
+  competitor    Competitor? @relation(fields: [competitorId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
+  @@index([competitorId])
 }
 
 model Url {
@@ -198,4 +202,26 @@ model Keyword {
   @@index([projectId])
   @@index([category])
   @@index([priorityScore])
+}
+
+model Competitor {
+  id              String   @id @default(cuid())
+  projectId       String
+  name            String
+  url             String
+  domain          String
+  manuallyAdded   Boolean  @default(true)
+  status          String   @default("pending") // pending | crawling | completed | failed
+  crawledAt       DateTime?
+  error           String?
+  pagesCrawled    Int      @default(0)
+  totalDiscovered Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  crawls   Crawl[]
+
+  @@index([projectId])
+  @@index([domain])
 }
