@@ -11,7 +11,7 @@ export default async function ProjectsPage() {
     projects = await prisma.project.findMany({
       where: { organizationId: user.organizationId },
       orderBy: { createdAt: "desc" },
-      include: { crawls: { select: { status: true } }, _count: { select: { crawls: true } } },
+      include: { crawls: { select: { status: true } }, _count: { select: { crawls: true } }, client: { select: { id: true, name: true } } },
     });
   }
 
@@ -65,6 +65,7 @@ export default async function ProjectsPage() {
                       {latest.status}
                     </span>
                   )}
+                  {p.client && <span className="rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">{p.client.name}</span>}
                   {p.industry && <span>{p.industry}</span>}
                 </div>
               </Link>

@@ -8,7 +8,7 @@ export async function GET() {
   const projects = await prisma.project.findMany({
     where: { organizationId: user.organizationId },
     orderBy: { createdAt: "desc" },
-    include: { _count: { select: { crawls: true } } },
+    include: { _count: { select: { crawls: true } }, client: { select: { id: true, name: true } } },
   });
   return Response.json({ projects });
 }
@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
       gbpUrl: body.gbpUrl || null,
       organizationId: user.organizationId,
       ownerId: user.id,
+      clientId: body.clientId || null,
     },
   });
 

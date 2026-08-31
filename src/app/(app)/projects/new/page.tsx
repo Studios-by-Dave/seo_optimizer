@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function NewProjectPage() {
@@ -13,7 +13,12 @@ export default function NewProjectPage() {
     primaryCategory: "",
     targetServiceArea: "",
     gbpUrl: "",
+    clientId: "",
   });
+  const [clients, setClients] = useState<{ id: string; name: string }[]>([]);
+  useEffect(() => {
+    fetch("/api/clients").then((r) => r.json()).then((d) => setClients(d.clients || [])).catch(() => {});
+  }, []);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -57,6 +62,14 @@ export default function NewProjectPage() {
           <div className="mt-4 space-y-4">
             <Field label="Project Name" required placeholder="Shelby Web Company" value={form.name} onChange={(v) => set("name", v)} />
             <Field label="Website URL" required placeholder="https://www.shelbywebco.com" value={form.websiteUrl} onChange={(v) => set("websiteUrl", v)} />
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Client (optional)</label>
+              <select value={form.clientId} onChange={(e) => set("clientId", e.target.value)} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none">
+                <option value="">No client — Agency project</option>
+                {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+              <p className="mt-1 text-xs text-slate-400">Assign to a client to organize agency work. <a href="/clients" className="underline">Manage clients</a></p>
+            </div>
             <Field label="Industry" placeholder="Web Design / SEO" value={form.industry} onChange={(v) => set("industry", v)} />
             <Field label="Primary Business Category" placeholder="Web Development Agency" value={form.primaryCategory} onChange={(v) => set("primaryCategory", v)} />
           </div>
