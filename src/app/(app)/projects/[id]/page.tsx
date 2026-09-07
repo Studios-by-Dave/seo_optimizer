@@ -3,6 +3,8 @@ import { getSessionUser } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import RunAuditButton from "@/components/RunAuditButton";
+import DeleteProjectButton from "@/components/DeleteProjectButton";
+import CrawlScheduleControl from "@/components/CrawlScheduleControl";
 
 export const dynamic = "force-dynamic";
 
@@ -29,12 +31,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <h1 className="text-2xl font-semibold">{project.name}</h1>
           <p className="mt-1 text-sm text-slate-500">{project.websiteUrl}</p>
         </div>
-        <Link
-          href="/projects"
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          Back to Projects
-        </Link>
+        <div className="flex items-center gap-3">
+          <DeleteProjectButton projectId={project.id} projectName={project.name} />
+          <Link
+            href="/projects"
+            className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            Back to Projects
+          </Link>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -50,6 +55,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <p className="mt-1 text-sm text-slate-900">{project.targetServiceArea}</p>
         </div>
       )}
+
+      <div className="mt-4">
+        <CrawlScheduleControl projectId={project.id} initialFrequency={project.crawlFrequency} initialNextCrawlAt={project.nextCrawlAt?.toISOString() || null} />
+      </div>
 
       <div className="mt-8">
         <div className="flex items-center justify-between">

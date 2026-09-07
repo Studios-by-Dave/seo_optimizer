@@ -25,19 +25,30 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!existing) return Response.json({ error: "Not found" }, { status: 404 });
 
   const body = await req.json().catch(() => ({}));
-  const data: Record<string, string | null> = {};
+  const data: Record<string, unknown> = {};
   if (body.name !== undefined) data.name = body.name;
   if (body.websiteUrl !== undefined) {
-    data.websiteUrl = body.websiteUrl;
-    try { data.domain = new URL(body.websiteUrl).hostname.replace(/^www\./, ""); } catch {}
+    (data as Record<string, string>).websiteUrl = body.websiteUrl;
+    try { (data as Record<string, string>).domain = new URL(body.websiteUrl).hostname.replace(/^www\./, ""); } catch {}
   }
   if (body.businessLocation !== undefined) data.businessLocation = body.businessLocation || null;
   if (body.industry !== undefined) data.industry = body.industry || null;
   if (body.primaryCategory !== undefined) data.primaryCategory = body.primaryCategory || null;
   if (body.targetServiceArea !== undefined) data.targetServiceArea = body.targetServiceArea || null;
   if (body.gbpUrl !== undefined) data.gbpUrl = body.gbpUrl || null;
+  if (body.crawlFrequency !== undefined) {
+    const allowed = ["daily", "weekly", "monthly", null, ""];
+    const v = body.crawlFrequency ? String(body.crawlFrequency) : null;
+    if (v && !allowed.includes(v)) return Response.json({ error: "Invalid crawlFrequency" }, { status: 400 });
+    data.crawlFrequency = v;
+    // auto-set nextCrawlAt
+    if (v === "daily") data.nextCrawlAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    else if (v === "weekly") data.nextCrawlAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    else if (v === "monthly") data.nextCrawlAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    else data.nextCrawlAt = null;
+  }
 
-  const project = await prisma.project.update({ where: { id }, data });
+  const project = await prisma.project.update({ where: { id }, data: data as never });
   return Response.json({ project });
 }
 

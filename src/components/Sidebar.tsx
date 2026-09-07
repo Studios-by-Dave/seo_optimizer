@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-type NavItem = { href: string; label: string };
+type NavItem = { href: string; label: string; icon?: string };
 
 const NAV: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
@@ -29,9 +30,32 @@ export function Sidebar({ user }: { user: { name: string | null; email: string }
 
   return (
     <aside className="flex h-screen w-60 flex-col border-r border-slate-200 bg-white">
-      <div className="border-b border-slate-200 px-5 py-4">
-        <p className="text-sm font-semibold">SEO Optimizer</p>
-        <p className="truncate text-xs text-slate-500">{user.name || user.email}</p>
+      <div className="border-b border-slate-200 px-4 py-4">
+        <Link href="/dashboard" className="flex items-center gap-3">
+          {/* Shelby Web Co. logo */}
+          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/5">
+            <Image
+              src="/assets/SWeblogo1.jpg"
+              alt="Shelby Web Co."
+              width={36}
+              height={36}
+              className="h-full w-full object-contain"
+              priority
+            />
+          </div>
+          <div className="min-w-0 leading-none">
+            <p className="text-[11px] font-extrabold tracking-[0.08em] text-[#0B1D3A]">
+              SHELBY WEB CO.
+            </p>
+            <p className="mt-0.5 text-[13px] font-black tracking-tight text-[#0B1D3A]">
+              SIS CONSOLE
+            </p>
+            <p className="mt-0.5 text-[9px] font-medium tracking-[0.14em] text-slate-500">
+              SEO INTELLIGENCE SUITE
+            </p>
+          </div>
+        </Link>
+        <p className="mt-3 truncate text-xs text-slate-500">{user.name || user.email}</p>
       </div>
       <nav className="flex-1 space-y-1 px-3 py-4">
         {NAV.map((item) => {
@@ -40,8 +64,10 @@ export function Sidebar({ user }: { user: { name: string | null; email: string }
             <Link
               key={item.href}
               href={item.href}
-              className={`block rounded-lg px-3 py-2 text-sm font-medium ${
-                active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
+              className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                active
+                  ? "bg-[#0B1D3A] text-white shadow-sm"
+                  : "text-slate-700 hover:bg-slate-100 hover:text-[#0B1D3A]"
               }`}
             >
               {item.label}

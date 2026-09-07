@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SEO Optimizer",
-  description: "All-in-one SEO intelligence for web agencies",
+  title: "SIS Console — Shelby Web Co. | SEO Intelligence Suite",
+  description: "SIS Console — SEO Intelligence Suite by Shelby Web Co. All-in-one SEO intelligence for agencies.",
+  icons: { icon: "/assets/SWeblogo1.jpg" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -28,8 +28,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-semibold">Welcome back, {user?.name || user?.email}</h1>
-      <p className="mt-1 text-sm text-slate-500">Your SEO command center</p>
+      <div className="rounded-2xl bg-gradient-to-r from-[#0B1D3A] to-[#12305f] p-6 text-white shadow-sm">
+        <p className="text-[11px] font-semibold tracking-[0.18em] text-white/60">SHELBY WEB CO. — SEO INTELLIGENCE SUITE</p>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight">SIS Console</h1>
+        <p className="mt-1 text-sm text-white/70">Welcome back, {user?.name || user?.email} — your SEO command center</p>
+      </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Projects" value={String(projectCount)} accent="blue" />
@@ -51,7 +54,7 @@ export default async function DashboardPage() {
             <p className="text-sm text-slate-500">No projects yet.</p>
             <Link
               href="/projects/new"
-              className="mt-3 inline-block rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+              className="mt-3 inline-block rounded-lg bg-[#0B1D3A] px-4 py-2 text-sm font-medium text-white hover:bg-[#132a52]"
             >
               Create your first project
             </Link>

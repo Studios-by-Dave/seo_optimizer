@@ -29,6 +29,18 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Invalid URL" }, { status: 400 });
   }
 
+  let crawlFrequency: string | null = null;
+  let nextCrawlAt: Date | null = null;
+  if (body.crawlFrequency) {
+    const v = String(body.crawlFrequency);
+    if (["daily", "weekly", "monthly"].includes(v)) {
+      crawlFrequency = v;
+      if (v === "daily") nextCrawlAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      else if (v === "weekly") nextCrawlAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      else if (v === "monthly") nextCrawlAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    }
+  }
+
   const project = await prisma.project.create({
     data: {
       name: body.name,
@@ -42,6 +54,8 @@ export async function POST(req: NextRequest) {
       organizationId: user.organizationId,
       ownerId: user.id,
       clientId: body.clientId || null,
+      crawlFrequency,
+      nextCrawlAt,
     },
   });
 

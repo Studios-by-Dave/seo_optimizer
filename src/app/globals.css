@@ -3,6 +3,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Shelby Web Co. brand */
+  --shelby-navy: #0b1d3a;
+  --shelby-navy-2: #132a52;
+  --shelby-cyan: #00d4ff;
+  --shelby-cyan-soft: #e6f9ff;
+  --shelby-accent: #00b8e6;
 }
 
 @theme inline {

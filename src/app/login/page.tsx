@@ -32,8 +32,16 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h1 className="text-xl font-semibold">SEO Optimizer</h1>
-        <p className="mt-1 text-sm text-slate-500">Sign in to your agency workspace</p>
+        <div className="mb-4 flex items-center gap-3">
+          <img src="/assets/SWeblogo1.jpg" alt="Shelby Web Co." className="h-9 w-9 rounded-lg object-contain ring-1 ring-black/5" />
+          <div className="leading-none">
+            <p className="text-[11px] font-extrabold tracking-[0.08em] text-[#0B1D3A]">SHELBY WEB CO.</p>
+            <p className="mt-0.5 text-[13px] font-black tracking-tight text-[#0B1D3A]">SIS CONSOLE</p>
+            <p className="mt-0.5 text-[9px] font-medium tracking-[0.14em] text-slate-500">SEO INTELLIGENCE SUITE</p>
+          </div>
+        </div>
+        <h1 className="text-xl font-semibold">Welcome back</h1>
+        <p className="mt-1 text-sm text-slate-500">Sign in to SIS Console</p>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div>
             <label className="block text-sm font-medium">Email</label>

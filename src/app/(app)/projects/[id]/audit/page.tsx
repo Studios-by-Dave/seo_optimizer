@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import ReportExportControl from "@/components/ReportExportControl";
 
 type AuditData = {
   crawlId: string | null;
@@ -129,6 +130,14 @@ export default function AuditReportPage({ params }: { params: Promise<{ id: stri
         </div>
       ) : (
         <>
+          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-4">
+            <h3 className="text-sm font-semibold">Export</h3>
+            <p className="text-xs text-slate-500">Branded PDF uses your Settings logo &amp; colors. Toggle off for clean client-free export.</p>
+            <div className="mt-3">
+              <ReportExportControl projectId={projectId} />
+            </div>
+          </div>
+
           {/* Score overview */}
           <div className="mt-6 grid gap-6 lg:grid-cols-3">
             <div className="rounded-xl border border-slate-200 bg-white p-6 flex flex-col items-center justify-center">

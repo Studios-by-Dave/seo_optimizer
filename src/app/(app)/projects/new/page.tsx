@@ -14,6 +14,7 @@ export default function NewProjectPage() {
     targetServiceArea: "",
     gbpUrl: "",
     clientId: "",
+    crawlFrequency: "",
   });
   const [clients, setClients] = useState<{ id: string; name: string }[]>([]);
   useEffect(() => {
@@ -81,6 +82,20 @@ export default function NewProjectPage() {
             <Field label="Business Location" placeholder="Shelby, NC" value={form.businessLocation} onChange={(v) => set("businessLocation", v)} />
             <Field label="Target Service Area" placeholder="Shelby, NC and surrounding areas" value={form.targetServiceArea} onChange={(v) => set("targetServiceArea", v)} />
             <Field label="Google Business Profile URL (optional)" placeholder="https://business.google.com/..." value={form.gbpUrl} onChange={(v) => set("gbpUrl", v)} />
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-slate-900">Crawl Schedule</h2>
+          <p className="text-xs text-slate-500">Auto-run audits in the background (manual still available anytime).</p>
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-slate-700">Frequency</label>
+            <select value={form.crawlFrequency} onChange={(e) => set("crawlFrequency", e.target.value)} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-[#0B1D3A] focus:outline-none">
+              <option value="">Manual only (no auto-crawl)</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
           </div>
         </div>
 
