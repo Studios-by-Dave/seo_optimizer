@@ -25,7 +25,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <a key={h} href={h} className="whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">{h.replace("/","")}</a>
           ))}
         </div>
-        <main className="h-[calc(100vh-0px)] flex-1 overflow-y-auto md:h-screen">{children}</main>
+        <main className="h-[calc(100vh-0px)] flex-1 overflow-y-auto bg-[#eef1f4] md:h-screen">{children}</main>
       </div>
     </div>
   );
