@@ -51,10 +51,17 @@ export default async function ReportsPage() {
         </div>
       )}
 
-      <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6">
-        <h3 className="text-sm font-semibold">How reports work</h3>
-        <p className="mt-1 text-xs text-slate-500">Each project audit can be exported as a white-label PDF using your org logo and primary color from Settings. Use Reports to share with clients.</p>
-        <Link href="/settings" className="mt-3 inline-block text-xs font-medium text-[#0B1D3A] underline">Edit branding in Settings →</Link>
+      <div className="mt-8 grid gap-4 md:grid-cols-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-6">
+          <h3 className="text-sm font-semibold">How reports work</h3>
+          <p className="mt-1 text-xs text-slate-500">Each project audit can be exported as a white-label PDF using your org logo and primary color from Settings. Use the toggle above to enable/disable branded export.</p>
+          <Link href="/settings" className="mt-3 inline-block text-xs font-medium text-[#0B1D3A] underline">Edit branding in Settings →</Link>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-6">
+          <h3 className="text-sm font-semibold">Cron & Docs</h3>
+          <p className="mt-1 text-xs text-slate-500">Schedule auto-crawls and see PDF query params.</p>
+          <Link href="/help" className="mt-3 inline-block text-xs font-medium text-[#0B1D3A] underline">Open Help → Cron & PDF docs</Link>
+        </div>
       </div>
     </div>
   );

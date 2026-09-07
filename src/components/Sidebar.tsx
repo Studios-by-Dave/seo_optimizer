@@ -16,6 +16,7 @@ const NAV: NavItem[] = [
   { href: "/reports", label: "Reports" },
   { href: "/history", label: "History" },
   { href: "/settings", label: "Settings" },
+  { href: "/help", label: "Help" },
 ];
 
 export function Sidebar({ user }: { user: { name: string | null; email: string } }) {

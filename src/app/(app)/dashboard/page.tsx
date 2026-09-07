@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
+import ScoreTrendChart from "@/components/ScoreTrendChart";
+import { calculateAuditScore } from "@/lib/audit/score";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,7 @@ export default async function DashboardPage() {
   let keywordsCount = 0;
   let latestProjects: any[] = [];
   let recentHistory: { id: string; projectName: string; projectId: string; date: Date; pagesCrawled: number }[] = [];
+  let trendPoints: { label: string; score: number | null; date: string }[] = [];
 
   if (orgId) {
     [projectCount, crawlCount, issuesCount, keywordsCount] = await Promise.all([
@@ -44,6 +47,15 @@ export default async function DashboardPage() {
       date: (c.finishedAt || c.startedAt) as Date,
       pagesCrawled: c.pagesCrawled,
     }));
+    // Build trend: score per recent crawl (oldest → newest)
+    const crawlsAsc = [...recentCrawls].reverse();
+    trendPoints = await Promise.all(
+      crawlsAsc.map(async (c) => {
+        const s = await calculateAuditScore(c.id).catch(() => null);
+        const d = (c.finishedAt || c.startedAt) as Date;
+        return { label: d.toLocaleDateString(undefined, { month: "short", day: "numeric" }), score: s?.overall ?? null, date: d.toISOString() };
+      })
+    );
   }
 
   return (
@@ -123,6 +135,12 @@ export default async function DashboardPage() {
           </div>
         )}
       </div>
+
+      {trendPoints.filter((p) => p.score !== null).length >= 1 && (
+        <div className="mt-8">
+          <ScoreTrendChart points={trendPoints} />
+        </div>
+      )}
 
       {recentHistory.length > 0 && (
         <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6">
